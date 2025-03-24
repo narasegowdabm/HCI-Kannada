@@ -1,0 +1,215 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 222 89% 60%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 280 91% 77%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 47 95% 72%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 222 89% 60%;
+
+    --radius: 1rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5% 26%;
+    --sidebar-primary: 240 6% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 5% 96%;
+    --sidebar-accent-foreground: 240 6% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217 91% 60%;
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 213 92% 81%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 280 91% 77%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 48 96% 89%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 213 92% 81%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-rounded;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-comic font-bold;
+  }
+}
+
+/* Custom Classes */
+@layer components {
+  .kid-card {
+    @apply bg-white rounded-3xl p-6 shadow-kid transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .btn-kid {
+    @apply rounded-full px-6 py-3 font-comic font-bold shadow-kid transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:translate-y-1 active:shadow-none;
+  }
+
+  .btn-kid-primary {
+    @apply btn-kid bg-kid-blue text-white;
+  }
+
+  .btn-kid-secondary {
+    @apply btn-kid bg-kid-purple text-white;
+  }
+
+  .btn-kid-accent {
+    @apply btn-kid bg-kid-yellow text-foreground;
+  }
+
+  .alphabet-card {
+    @apply flex flex-col items-center justify-center p-8 bg-white rounded-3xl shadow-kid transition-all duration-300 hover:-translate-y-2 hover:shadow-lg cursor-pointer;
+  }
+
+  .page-container {
+    @apply animate-page-enter max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  }
+
+  /* 3D Effect for Cards */
+  .card-3d {
+    @apply relative transform transition-transform duration-300 ease-out;
+    transform-style: preserve-3d;
+  }
+
+  .card-3d:hover {
+    transform: rotateY(10deg) rotateX(10deg);
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg;
+  }
+
+  /* Custom transition for page changes */
+  .page-transition-enter {
+    @apply animate-page-enter;
+  }
+
+  .page-transition-exit {
+    @apply animate-page-exit;
+  }
+}
+
+/* Scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove outline for non-keyboard focus */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Improve scrollbar appearance */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary/50;
+}
+
+/* Animation for letter reveal */
+.letter-reveal {
+  animation: letter-pop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+
+@keyframes letter-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Progress bar animation */
+.progress-bar {
+  @apply relative h-4 bg-muted rounded-full overflow-hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  @apply absolute inset-0 bg-kid-green origin-left;
+  animation: progress-animate 2s ease-out;
+}
+
+@keyframes progress-animate {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
