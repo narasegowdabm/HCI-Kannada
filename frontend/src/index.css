@@ -78,11 +78,12 @@
     --ring: 213 92% 81%;
   }
 }
-
 @layer base {
-  * {
-    @apply border-border;
-  }
+  /** {
+    @apply border;
+  }*/
+}
+
 
   body {
     @apply bg-background text-foreground font-rounded;
@@ -91,7 +92,7 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-comic font-bold;
   }
-}
+
 
 /* Custom Classes */
 @layer components {

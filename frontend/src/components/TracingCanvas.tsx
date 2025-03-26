@@ -49,13 +49,11 @@ export const TracingCanvas: React.FC<TracingCanvasProps> = ({
         letterCanvas.style.width = `${size}px`;
         letterCanvas.style.height = `${size}px`;
         letterCtx.scale(dpr, dpr);
-        
-       letterCtx.font = '280px Arial';
+        letterCtx.font = '280px Arial';
         letterCtx.textAlign = 'center';
         letterCtx.textBaseline = 'middle';
         letterCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-        letterCtx.fillText(letter, size/2,size/2);
-       
+        letterCtx.fillText(letter, size / 2, size / 2);
       }
     }
   }, [letter]);
@@ -124,10 +122,21 @@ export const TracingCanvas: React.FC<TracingCanvasProps> = ({
     e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
   ) => {
     e.preventDefault();
-    if (!isDrawing || !context) return;
+    if (!isDrawing || !context || !canvasRef.current || !letterCanvasRef.current) return;
     
     const pos = getPosition(e);
     if (pos) {
+      // Get the letter canvas context and check if the point is on the letter
+      const letterCtx = letterCanvasRef.current.getContext('2d', { willReadFrequently: true });
+      if (letterCtx) {
+        const dpr = window.devicePixelRatio || 1;
+        // Multiply position by dpr to get the correct pixel in the actual canvas image data
+        const imageData = letterCtx.getImageData(pos.x * dpr, pos.y * dpr, 1, 1).data;
+        const isOnLetter = imageData[3] > 0; // Check if the alpha channel is > 0
+        // Set the stroke color based on whether the point is on the letter or not
+        context.strokeStyle = isOnLetter ? 'green' : 'red';
+      }
+      
       setPoints(prev => [...prev, pos]);
       context.lineTo(pos.x, pos.y);
       context.stroke();

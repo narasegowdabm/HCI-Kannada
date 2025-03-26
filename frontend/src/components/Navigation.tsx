@@ -62,10 +62,7 @@ const Navigation: React.FC = () => {
                 <span>{item.name}</span>
               </Link>
             ))}
-            <button className="btn-kid-primary flex items-center space-x-2">
-              <Settings size={18} />
-              <span>Settings</span>
-            </button>
+            
           </div>
 
           {/* Mobile menu button */}
