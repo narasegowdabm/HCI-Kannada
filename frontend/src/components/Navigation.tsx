@@ -1,11 +1,11 @@
-
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X, Home, BookOpen, Play, Award, Settings } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, Home, BookOpen, Play, Award, Settings, LogOut } from "lucide-react";
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   // Handle scroll effect
   useEffect(() => {
@@ -17,28 +17,36 @@ const Navigation: React.FC = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Navigation items (excluding Logout)
   const navItems = [
-    { name: 'Home', icon: <Home size={20} />, href: '/' },
-    { name: 'Learn', icon: <BookOpen size={20} />, href: '/learn' },
-    { name: 'Play', icon: <Play size={20} />, href: '/play' },
-    { name: 'Progress', icon: <Award size={20} />, href: '/progress' },
+    { name: "Home", icon: <Home size={20} />, href: "/home" },
+    { name: "Learn", icon: <BookOpen size={20} />, href: "/learn" },
+    { name: "Play", icon: <Play size={20} />, href: "/play" },
+    { name: "Progress", icon: <Award size={20} />, href: "/progress" },
   ];
 
+  // Logout handler: clear local storage and redirect to signin
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/signin");
+    setIsOpen(false);
+  };
+
   return (
-    <nav 
+    <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-soft py-2' : 'bg-transparent py-4'
+        scrolled ? "bg-white shadow-soft py-2" : "bg-transparent py-4"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link 
-            to="/" 
+          <Link
+            to="/home"
             className="flex items-center space-x-2"
             onClick={() => setIsOpen(false)}
           >
@@ -62,7 +70,14 @@ const Navigation: React.FC = () => {
                 <span>{item.name}</span>
               </Link>
             ))}
-            
+            {/* Logout button */}
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-1 font-comic text-gray-700 hover:text-kid-blue transition-colors"
+            >
+              <LogOut size={20} />
+              <span>Logout</span>
+            </button>
           </div>
 
           {/* Mobile menu button */}
@@ -79,7 +94,7 @@ const Navigation: React.FC = () => {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
+      <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
         <div className="bg-white shadow-lg rounded-b-3xl mx-4 animate-slide-down">
           <div className="pt-2 pb-4 space-y-1 px-4">
             {navItems.map((item) => (
@@ -93,6 +108,14 @@ const Navigation: React.FC = () => {
                 <span>{item.name}</span>
               </Link>
             ))}
+            {/* Mobile Logout */}
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-3 w-full px-3 py-4 text-base font-comic text-gray-700 hover:bg-red-100 hover:text-red-600 rounded-xl transition-colors"
+            >
+              <LogOut size={20} />
+              <span>Logout</span>
+            </button>
             <div className="pt-4">
               <button 
                 className="btn-kid-primary w-full flex items-center justify-center space-x-2"

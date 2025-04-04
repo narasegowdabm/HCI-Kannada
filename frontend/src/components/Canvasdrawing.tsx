@@ -2,16 +2,16 @@
 import { useRef, useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Pencil, Download, Send } from "lucide-react";
+import { auth } from "../firebase"; // Ensure Firebase auth is set up
 import React from "react";
 
 const letters = [
-  'ಅ', 'ಆ', 'ಇ', 'ಈ', 'ಉ', 'ಊ', 'ಋ', 'ಎ', 'ಏ', 'ಐ',
-  'ಒ', 'ಓ', 'ಔ', 'ಅಂ', 'ಅಃ', 'ಕ', 'ಖ', 'ಗ', 'ಘ', 'ಙ',
-  'ಚ', 'ಛ', 'ಜ', 'ಝ', 'ಞ', 'ಟ', 'ಠ', 'ಡ', 'ಢ', 'ಣ',
-  'ತ', 'ಥ', 'ದ', 'ಧ', 'ನ', 'ಪ', 'ಫ', 'ಬ', 'ಭ', 'ಮ',
-  'ಯ', 'ರ', 'ಲ', 'ವ', 'ಶ', 'ಷ', 'ಸ', 'ಹ', 'ಳ'
+  "ಅ", "ಆ", "ಇ", "ಈ", "ಉ", "ಊ", "ಋ", "ಎ", "ಏ", "ಐ",
+  "ಒ", "ಓ", "ಔ", "ಅಂ", "ಅಃ", "ಕ", "ಖ", "ಗ", "ಘ", "ಙ",
+  "ಚ", "ಛ", "ಜ", "ಝ", "ಞ", "ಟ", "ಠ", "ಡ", "ಢ", "ಣ",
+  "ತ", "ಥ", "ದ", "ಧ", "ನ", "ಪ", "ಫ", "ಬ", "ಭ", "ಮ",
+  "ಯ", "ರ", "ಲ", "ವ", "ಶ", "ಷ", "ಸ", "ಹ", "ಳ",
 ];
-
 
 interface CanvasDrawingProps {
   letter: string;
@@ -81,6 +81,26 @@ const CanvasDrawing: React.FC<CanvasDrawingProps> = ({ letter, setIsCorrect }) =
     setRecognitionResult(null);
   };
 
+  // New function: Update user progress in local storage
+  const updateLocalProgress = (letter: string, isCorrect: boolean) => {
+    // Retrieve existing progress from local storage
+    const progress = JSON.parse(localStorage.getItem("progress") || "{}");
+
+    // If no progress for this letter exists, initialize it
+    if (!progress[letter]) {
+      progress[letter] = { attempts: 0, success: 0 };
+    }
+
+    // Update attempt count and success count if correct
+    progress[letter].attempts += 1;
+    if (isCorrect) {
+      progress[letter].success += 1;
+    }
+
+    // Save the updated progress back to local storage
+    localStorage.setItem("progress", JSON.stringify(progress));
+  };
+
   const processImage = async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -108,11 +128,16 @@ const CanvasDrawing: React.FC<CanvasDrawingProps> = ({ letter, setIsCorrect }) =
 
       const data = await response.json();
       setRecognitionResult(data.prediction);
-      console.log(data.prediction)
-      if(letters[data.prediction-1] == letter){
-        setIsCorrect(true)
-      }else{
-        setIsCorrect(false)
+
+      if (letters[data.prediction - 1] === letter) {
+        setIsCorrect(true);
+        updateLocalProgress(letter, true); // Update local storage for correct attempt
+        // Existing updateProgress fetch call remains (if needed)
+        // await updateProgress(letter, true);
+      } else {
+        setIsCorrect(false);
+        updateLocalProgress(letter, false); // Update local storage for incorrect attempt
+        // await updateProgress(letter, false);
       }
     } catch (error) {
       console.error("Error sending image:", error);

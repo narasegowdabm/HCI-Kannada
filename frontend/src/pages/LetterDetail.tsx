@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { ArrowLeft, Book, Pencil, Volume2 } from "lucide-react";
 import type { KannadaLetter } from "../types/letter";
 import { kannadaLetters } from "../data/kannada-letters";
-import CanvasDrawing from "../components/CanvasDrawing";
+import CanvasDrawing from "../components/Canvasdrawing";
 import Confetti from "react-confetti";
 
 const LetterDetail = () => {
