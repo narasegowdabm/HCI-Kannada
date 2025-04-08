@@ -4,7 +4,7 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// SIGNUP: Create new user and store in MongoDB
+// SIGNUP: Create new user
 router.post("/signup", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -15,8 +15,7 @@ router.post("/signup", async (req, res) => {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create new user document
+    // Create new user
     const newUser = new User({ email, password: hashedPassword });
     await newUser.save();
 

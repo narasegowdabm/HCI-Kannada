@@ -3,12 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, Home, BookOpen, Play, Award, Settings, LogOut } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
-// Define a type for progress data
-interface ProgressData {
-  attempts: number;
-  success: number;
-}
-
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -29,20 +23,19 @@ const Navigation: React.FC = () => {
     { name: "Progress", icon: <Award size={20} />, href: "/progress" }
   ];
 
-  // Fetch the user's progress and compute overall accuracy
+  // Fetch overall progress for the logged-in user
   useEffect(() => {
     if (!user?._id) {
       setOverallAccuracy(null);
       return;
     }
     fetch(`http://localhost:5000/api/auth/progress/${user._id}`)
-      .then(res => res.json())
-      .then(data => {
-        // data.progress should be an object whose keys are letters and values follow the ProgressData shape
-        const progress: Record<string, ProgressData> = data.progress || {};
+      .then((res) => res.json())
+      .then((data) => {
+        const progress: Record<string, { attempts: number; success: number }> = data.progress || {};
         let totalAttempts = 0;
         let totalSuccess = 0;
-        Object.values(progress).forEach((p: ProgressData) => {
+        Object.values(progress).forEach((p) => {
           totalAttempts += p.attempts;
           totalSuccess += p.success;
         });
@@ -89,8 +82,7 @@ const Navigation: React.FC = () => {
             </Link>
           ))}
           <button onClick={handleLogout} className="flex items-center space-x-1 hover:text-kid-blue">
-            <LogOut size={20} />
-            <span>Logout</span>
+            <LogOut size={20} /><span>Logout</span>
           </button>
         </div>
         <button
@@ -120,12 +112,10 @@ const Navigation: React.FC = () => {
             </Link>
           ))}
           <button onClick={handleLogout} className="flex items-center space-x-2 hover:text-kid-blue">
-            <LogOut size={20} />
-            <span>Logout</span>
+            <LogOut size={20} /><span>Logout</span>
           </button>
           <button className="flex items-center space-x-2" onClick={() => setIsOpen(false)}>
-            <Settings size={20} />
-            <span>Settings</span>
+            <Settings size={20} /><span>Settings</span>
           </button>
         </div>
       )}
