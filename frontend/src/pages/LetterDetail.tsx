@@ -23,6 +23,7 @@ const LetterDetail = () => {
 
   const playSound = (soundFile: string) => {
     const audio = new Audio(soundFile);
+    console.log(audio)
     audio.play().catch((error) => console.error("Error playing sound:", error));
   };
 
@@ -65,7 +66,12 @@ const LetterDetail = () => {
           <div className={`${letterData.color} rounded-2xl p-8 flex flex-col items-center justify-center`}>
             <div className="text-8xl sm:text-9xl font-bold text-white mb-4">{letterData.letter}</div>
             <div className="text-2xl sm:text-3xl text-white font-medium">{letterData.transliteration}</div>
-            <Button variant="secondary" size="icon" className="mt-6">
+            <Button variant="secondary" size="icon" className="mt-6"
+            onClick={() =>{
+              console.log("helloworld");
+              playSound(`/scripts/${letterData.transliteration}.mp3`);
+            }}>
+              
               <Volume2 className="w-6 h-6" />
             </Button>
           </div>
